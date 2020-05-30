@@ -55,27 +55,17 @@ print(d[:, 3:5] - rp[:, :])
 
 # -- separate intrinsic parameters and extrinsic parameters --
 
-print(f'c: {c}')
-
 # - step 1 -
 
 abs_r3 = abs(math.sqrt(c[2, 0]**2 + c[2, 1]**2 + c[2, 2]**2))
 
-print(abs_r3)
-
 c = c * (1.0 / abs_r3)
-
-print(f'normailized c: {c}')
-
-print(math.sqrt(c[2, 0]**2 + c[2, 1]**2 + c[2, 2]**2))
 
 # - step 2 -
 
 r3 = c[2, :3]
 
 tz = c[2, 3]
-
-print(tz)
 
 # - step 3 -
 
@@ -111,3 +101,16 @@ ty = (sin_theta / alpha_v) * (c[1, 3] - v0 * tz)
 cot_theta = cos_theta / sin_theta
 r1 = (1 / alpha_u) * (c1 + alpha_u * cot_theta * r2.T - u0 * r3)
 tx = (1 / alpha_u) * (c[0, 3] + alpha_u * cot_theta * ty - u0 * tz)
+
+# -- calculate camera coordinate --
+
+R = np.array([r1, r2, r3])
+
+W = R.T @ (np.array([-tx, -ty, -tz]).T)
+
+viewing_vector = R[2].T
+
+print('---')
+print('Camera coordinate:', W)
+print('Viewing vector:', viewing_vector)
+print('Viewing vector norm:', np.linalg.norm(viewing_vector))
